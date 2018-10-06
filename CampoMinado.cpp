@@ -60,28 +60,25 @@ int main(){
         scanf("%d", &x);
         printf("Digite o eixo y: ");
         scanf("%d", &y);
-        if(x >= 0 && x <= size && y >= 0 && y <= size){
+
+        if(x >= 0 && x <= size && y >= 0 && y <= size) {
             imprime(campo_minado);
             mtz_Impressa[x-1][y-1] = campo_minado[x-1][y-1];
-            if(mtz_Impressa[x-1][y-1] == -1){
-                achouBomba = true;
-            }
+            
+            if(mtz_Impressa[x-1][y-1] == -1) achouBomba = true;
+            
             imprime(mtz_Impressa);
             ganhou();
         }
-        else{
-            printf("Digite as coordenadas no intervalo de 1 a %d.\n", size);
-        }
+        else printf("Digite as coordenadas no intervalo de 1 a %d.\n", size);
+
     }
-     //Caso ache uma bomba, o jogo acaba, se não se
+    
+    //Caso ache uma bomba, o jogo acaba, se não se
     //O usuario desbloqueou todos os espaços da matriz e so restar os com bomba ele ganha;
-    if (achouBomba == true){
-        texto_Perdeu();
+    if (achouBomba == true) texto_Perdeu();
+    else if(ganhou()) texto_Ganhou();
 
-    }else if(ganhou()){
-        texto_Ganhou();
-
-    }
     imprime(campo_minado);
     texto_Final();
 
@@ -128,7 +125,7 @@ void texto_Perdeu(){
 puts("");
 puts("|-----------------------------------------------------------------------------|");
 puts("| .--.   .--.             _       ,----.              .-.                     |");
-puts("| :  :   :  :            / \\     :      :             : :                     |");
+puts("| :  :   :  :            / \\     :      :             : :                    |");
 puts("| :  :._.:  : .--. .---..---.    :  ,__:.---.,----, .-' :.---.  _   _         |");
 puts("|  :        :' .; :: ::': :-'    :  :   : :-': ;-; ' .; :: :-''' .;  '        |");
 puts("|   :..__..: `.__.'`.__,`.__;    :__:   `.__;:_:   `.__.'`.__; `.___.'        |");
@@ -153,11 +150,8 @@ puts("|-------------------------------------------------------------------------
 //Os valores na matriz que possuem -2, são os que o usuario ainda não desbloqueou;
 //Isso apenas para a matriz que sera exibida ao usuario;
 void prencherCamposVazio(){
-
     for(int j = 0; j < size; j ++){
-         for(int k = 0; k < size; k ++){
-            mtz_Impressa[j][k] = -2;
-         }
+         for(int k = 0; k < size; k ++) mtz_Impressa[j][k] = -2;
     }
 
 }
@@ -170,10 +164,8 @@ void gerandoBomba(){
     srand(time(NULL));
 
     for(int i = 0; i <= quant_bombas; i++){
-
         posicao_x_tabela = rand() % size;
         posicao_y_tabela = rand() % size;
-
         campo_minado[posicao_x_tabela][posicao_y_tabela] = -1;
     }
 
@@ -182,12 +174,9 @@ void gerandoBomba(){
 //Verifica os quadrados que contem bomba e passa a posicao do quadrado, na matriz principal,
 //como parametro do metodo somaAdjacentes();
 void minasAdjacentes(){
-
     for(int x = 0; x < size; x++){
         for(int y = 0; y < size; y++){
-            if(campo_minado[x][y] == -1){
-                somaAdjacentes(x, y);
-            }
+            if(campo_minado[x][y] == -1) somaAdjacentes(x, y);
         }
     }
 }
@@ -200,7 +189,6 @@ void somaAdjacentes(int x, int y){
     int y_bomba = y;
 
     if(x > 0 && x < size-1){
-
         if(y > 0 && y < size-1){
             //Linha da Bomba
             verificaESoma(x, y-1);
@@ -215,7 +203,6 @@ void somaAdjacentes(int x, int y){
             verificaESoma(x+1, y);
             verificaESoma(x+1, y-1);
             verificaESoma(x+1, y+1);
-
         }
 
         else if(y == 0){
@@ -321,9 +308,7 @@ void somaAdjacentes(int x, int y){
 
 //Verifica se a posição não eh uma bomba, se não for, soma mais 1;
 void verificaESoma(int x, int y){
-    if(campo_minado[x][y] != -1){
-        campo_minado[x][y] += 1;
-    }
+    if(campo_minado[x][y] != -1) campo_minado[x][y] += 1;
 }
 
 //Verifica se o usuraio ganhou o jogo;
@@ -332,9 +317,7 @@ bool ganhou(){
     for(int j = 0; j < size; j ++){
         for(int k = 0; k < size; k ++){
             if( mtz_Impressa[j][k] == -2){
-                if(campo_minado[j][k] != -1){
-                    return false;
-                }
+                if(campo_minado[j][k] != -1) return false;
             }
         }
     }
@@ -349,26 +332,15 @@ void imprime(int matriz[9][9]){
         printf("                    ");
         printf("|");
         for(int y = 0; y < size; y++){
-            if(matriz[x][y] == -2){
-                printf(" x |");
-            }
+            if(matriz[x][y] == -2) printf(" x |");
             //Bomba!!!
-            else if(matriz[x][y] == -1){
-                printf(" * |");
-            }
+            else if(matriz[x][y] == -1) printf(" * |");
             //Espaço em branco!!!
-            else if(matriz[x][y] == 0){
-                printf("   |");
-            }
+            else if(matriz[x][y] == 0) printf("   |");
             //umeros Adjacentes!!!
-            else{
-                printf(" %d |",  matriz[x][y]);
-
-            }
+            else printf(" %d |",  matriz[x][y]);
         }
         printf("\n                    ");
         puts("-------------------------------------");
-
     }
-
 }
